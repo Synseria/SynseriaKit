@@ -2,7 +2,8 @@
 import SwiftUI
 
 // La trousse (`K` de reference/gabarit.html) en SwiftUI, ses fondations : les couleurs posées dans
-// l'environnement, les états imposés aux captures, le curseur de clic et l'anneau de focus communs.
+// l'environnement, les états imposés aux captures, le curseur de clic et l'anneau de focus communs,
+// la typo posée avec son interligne et le coin dans un coin.
 // Les contrôles ne lisent que `Jetons` et ces couleurs ; libellés et actions viennent de l'appelant.
 
 extension EnvironmentValues {
@@ -101,5 +102,49 @@ extension Jetons.Couleurs {
     public func piste(survolee: Bool) -> Jetons.RVB {
         Jetons.Octets.melange(Jetons.Octets(plaque.hex), Jetons.Octets(encre.hex),
                               survolee ? Jetons.pisteSurvol : Jetons.pisteRepos).rvb
+    }
+}
+
+// MARK: - La typo et les coins
+
+extension Jetons {
+    /// Un coin dans un coin : l'extérieur moins le padding qui les sépare, jamais négatif — deux
+    /// rayons égaux l'un dans l'autre font un filet plus épais aux angles.
+    public static func rayonInterieur(_ exterieur: CGFloat, padding: CGFloat) -> CGFloat { max(0, exterieur - padding) }
+}
+
+extension Jetons.Typo {
+    /// L'interligne du système pour cette taille, mesuré sur la police dessinée : SwiftUI n'en pose
+    /// que l'écart (`lineSpacing`), que `View.typo` ajoute.
+    @MainActor public var ecart: CGFloat {
+        #if os(macOS)
+        let poids: NSFont.Weight = switch graisse {
+        case 700: .bold
+        case 600: .semibold
+        case 500: .medium
+        default: .regular
+        }
+        let base = NSFont.systemFont(ofSize: taille, weight: poids)
+        let dessin: NSFontDescriptor.SystemDesign = police == .code ? .monospaced : .rounded
+        let dessinee = base.fontDescriptor.withDesign(dessin).flatMap { NSFont(descriptor: $0, size: taille) } ?? base
+        #else
+        let poids: UIFont.Weight = switch graisse {
+        case 700: .bold
+        case 600: .semibold
+        case 500: .medium
+        default: .regular
+        }
+        let base = UIFont.systemFont(ofSize: taille, weight: poids)
+        let dessin: UIFontDescriptor.SystemDesign = police == .code ? .monospaced : .rounded
+        let dessinee = base.fontDescriptor.withDesign(dessin).map { UIFont(descriptor: $0, size: taille) } ?? base
+        #endif
+        return max(0, interligne - (dessinee.ascender - dessinee.descender + dessinee.leading).rounded(.up))
+    }
+}
+
+extension View {
+    /// La police d'une typo du SDS et son interligne.
+    @MainActor public func typo(_ typo: Jetons.Typo) -> some View {
+        font(typo.font).lineSpacing(typo.ecart)
     }
 }

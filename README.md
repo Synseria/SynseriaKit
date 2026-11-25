@@ -11,7 +11,7 @@ qui publie une nouvelle version ici.
 **Swift** (macOS 26) :
 
 ```swift
-.package(url: "https://github.com/Synseria/SynseriaKit", exact: "2.0.1")
+.package(url: "https://github.com/Synseria/SynseriaKit", exact: "2.1.0")
 ```
 
 Produits : `SynseriaDesign` (`Jetons`, la trousse SwiftUI), `Telemetrie`, `MiseAJour`. Ce qui est propre
@@ -20,10 +20,10 @@ Produits : `SynseriaDesign` (`Jetons`, la trousse SwiftUI), `Telemetrie`, `MiseA
 **Web** :
 
 ```sh
-npm install github:Synseria/SynseriaKit#v2.0.1
+npm install github:Synseria/SynseriaKit#v2.1.0
 ```
 
-ou par jsDelivr : `https://cdn.jsdelivr.net/gh/Synseria/SynseriaKit@v2.0.1/web/synseria.css` et
+ou par jsDelivr : `https://cdn.jsdelivr.net/gh/Synseria/SynseriaKit@v2.1.0/web/synseria.css` et
 `…/web/couleur.js` (global `Couleur`, ou `require("@synseria/kit")`).
 
 **Android** : ressources `android/` (`jetons.xml`, clair et nuit), préparées pour JitPack ; pas
