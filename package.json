@@ -1,6 +1,6 @@
 {
   "name": "@synseria/kit",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Le design system Synseria : variables CSS et calcul des couleurs.",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
@@ -12,7 +12,9 @@
   "exports": {
     ".": "./web/couleur.js",
     "./couleur.js": "./web/couleur.js",
-    "./synseria.css": "./web/synseria.css"
+    "./synseria.css": "./web/synseria.css",
+    "./composants.js": "./web/composants.js",
+    "./nunito.css": "./web/nunito.css"
   },
   "files": [
     "web/",

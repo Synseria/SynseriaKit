@@ -118,6 +118,10 @@ public enum Jetons {
     public static let largeurFeuille: CGFloat = 400
     /// fenêtre À propos
     public static let largeurApropos: CGFloat = 340
+    /// fenêtre des réglages
+    public static let largeurReglages: CGFloat = 1120
+    /// fenêtre des réglages : la même pour tous les onglets, Réglages ▸ Thème y tient sans défiler, en-tête compris
+    public static let hauteurReglages: CGFloat = 710
 
     // MARK: Mouvement
     /// survol, pression
@@ -144,6 +148,8 @@ public enum Jetons {
     public static let verreOpaciteFlottant: Double = 0.05
     /// part du fond de fenêtre dans la barre d'une fenêtre (feux, onglets, recherche) : elle porte du texte, plus couvrante que le menu latéral — valeur d'essai
     public static let verreOpaciteBarre: Double = 0.4
+    /// part du fond de fenêtre dans l'en-tête des réglages (onglets), d'un bord à l'autre : le verre y reste, plus couvrant que la barre ; plein seulement si le Mac refuse le verre
+    public static let verreOpaciteEntete: Double = 0.72
     /// part du fond de fenêtre derrière la plaque, à droite du menu latéral (qui reste à verre-opacite-focus) — valeur d'essai
     public static let verreOpacitePage: Double = 0.2
     /// flou derrière le verre
@@ -400,6 +406,86 @@ extension Jetons {
         public static let remplacer = "Remplacer"
         public static let copier = "Copier"
         public static let annuler = "Annuler"
+    }
+
+    /// Les mots de la fenêtre de réglages commune ; `%@` : le nom de l'app ou un numéro de version.
+    public struct LibellesDesReglages: Sendable, Hashable {
+        public var reglages: String
+        public var aPropos: String
+        public var general: String
+        public var theme: String
+        public var ouverture: String
+        public var ouvertureAide: String
+        public var autoriser: String
+        public var autoriserAide: String
+        public var maLangue: String
+        public var langueDuSysteme: String
+        public var rechercherUneLangue: String
+        public var statistiques: String
+        public var partager: String
+        public var dernierEnvoi: String
+        public var jamais: String
+        public var voirLesDonnees: String
+        public var prochainEnvoi: String
+        public var rienAEnvoyer: String
+        public var copier: String
+        public var copie: String
+        public var miseAJour: String
+        public var canal: String
+        public var canalAide: String
+        public var stable: String
+        public var beta: String
+        public var version: String
+        public var rechercher: String
+        public var aJour: String
+        public var telechargement: String
+        public var nouveautes: String
+        public var installer: String
+
+        public init(reglages: String, aPropos: String, general: String, theme: String, ouverture: String, ouvertureAide: String, autoriser: String, autoriserAide: String, maLangue: String, langueDuSysteme: String, rechercherUneLangue: String, statistiques: String, partager: String, dernierEnvoi: String, jamais: String, voirLesDonnees: String, prochainEnvoi: String, rienAEnvoyer: String, copier: String, copie: String, miseAJour: String, canal: String, canalAide: String, stable: String, beta: String, version: String, rechercher: String, aJour: String, telechargement: String, nouveautes: String, installer: String) {
+            self.reglages = reglages
+            self.aPropos = aPropos
+            self.general = general
+            self.theme = theme
+            self.ouverture = ouverture
+            self.ouvertureAide = ouvertureAide
+            self.autoriser = autoriser
+            self.autoriserAide = autoriserAide
+            self.maLangue = maLangue
+            self.langueDuSysteme = langueDuSysteme
+            self.rechercherUneLangue = rechercherUneLangue
+            self.statistiques = statistiques
+            self.partager = partager
+            self.dernierEnvoi = dernierEnvoi
+            self.jamais = jamais
+            self.voirLesDonnees = voirLesDonnees
+            self.prochainEnvoi = prochainEnvoi
+            self.rienAEnvoyer = rienAEnvoyer
+            self.copier = copier
+            self.copie = copie
+            self.miseAJour = miseAJour
+            self.canal = canal
+            self.canalAide = canalAide
+            self.stable = stable
+            self.beta = beta
+            self.version = version
+            self.rechercher = rechercher
+            self.aJour = aJour
+            self.telechargement = telechargement
+            self.nouveautes = nouveautes
+            self.installer = installer
+        }
+
+        public static let fr = LibellesDesReglages(reglages: "Réglages", aPropos: "À propos de %@", general: "Général", theme: "Thème", ouverture: "Ouvrir avec la session", ouvertureAide: "%@ s’ouvre avec ta session. Se règle aussi dans Réglages Système ▸ Général ▸ Ouverture.", autoriser: "Autoriser", autoriserAide: "macOS attend ton accord dans Réglages Système ▸ Général ▸ Ouverture.", maLangue: "Ma langue", langueDuSysteme: "Langue du système", rechercherUneLangue: "Rechercher", statistiques: "Statistiques d’utilisation", partager: "Partager les statistiques d’utilisation", dernierEnvoi: "Dernier envoi", jamais: "Jamais", voirLesDonnees: "Voir les données", prochainEnvoi: "Prochain envoi", rienAEnvoyer: "Rien à envoyer", copier: "Copier", copie: "Copié", miseAJour: "Mise à jour", canal: "Canal", canalAide: "Bêta propose aussi les versions préliminaires.", stable: "Stable", beta: "Bêta", version: "Version %@", rechercher: "Rechercher", aJour: "À jour", telechargement: "Téléchargement de la version %@…", nouveautes: "Nouveautés", installer: "Installer %@ et relancer")
+        public static let en = LibellesDesReglages(reglages: "Settings", aPropos: "About %@", general: "General", theme: "Theme", ouverture: "Open at login", ouvertureAide: "%@ opens when you log in. Also set in System Settings ▸ General ▸ Login Items.", autoriser: "Allow", autoriserAide: "macOS is waiting for your approval in System Settings ▸ General ▸ Login Items.", maLangue: "My language", langueDuSysteme: "System language", rechercherUneLangue: "Search", statistiques: "Usage statistics", partager: "Share usage statistics", dernierEnvoi: "Last sent", jamais: "Never", voirLesDonnees: "View data", prochainEnvoi: "Next report", rienAEnvoyer: "Nothing to send", copier: "Copy", copie: "Copied", miseAJour: "Updates", canal: "Channel", canalAide: "Beta also offers pre-release versions.", stable: "Stable", beta: "Beta", version: "Version %@", rechercher: "Check", aJour: "Up to date", telechargement: "Downloading version %@…", nouveautes: "What’s New", installer: "Install %@ and relaunch")
+
+        /// Ceux d'une langue (« en », « en-GB », « fr »…) ; le français pour une langue qu'ils n'ont pas.
+        public static func langue(_ code: String) -> LibellesDesReglages {
+            switch code.prefix(2) {
+            case "en": .en
+            default: .fr
+            }
+        }
     }
 }
 

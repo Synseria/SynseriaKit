@@ -89,6 +89,8 @@
     <dimen name="syn_largeur_nav">200dp</dimen>
     <dimen name="syn_largeur_feuille">400dp</dimen>
     <dimen name="syn_largeur_apropos">340dp</dimen>
+    <dimen name="syn_largeur_reglages">1120dp</dimen>
+    <dimen name="syn_hauteur_reglages">710dp</dimen>
     <integer name="syn_duree_rapide">120</integer>
     <integer name="syn_duree_normale">200</integer>
     <integer name="syn_duree_lente">320</integer>

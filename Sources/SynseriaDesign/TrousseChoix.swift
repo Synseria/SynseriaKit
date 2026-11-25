@@ -616,15 +616,13 @@ public struct Puce: View {
 
 /// Les onglets d'une fenêtre de réglages (`.stab`) : l'icône et le nom en micro dessous, sans cadre,
 /// le choisi sur le fond du choix et l'accent en texte. Pas de titre de page : les onglets disent où
-/// l'on est. Un seul arrêt de Tab, ←→ changent d'onglet.
+/// l'on est. Ceux de l'app d'abord, puis un filet, puis les communs (`communs`) ; un seul arrêt de
+/// Tab, ←→ passent d'un onglet au suivant, filet compris.
 ///
-/// Dans la fenêtre, cette barre est le bandeau du haut (`.sw .bar`) : la fenêtre hôte est en
-/// `fullSizeContentView` + `titlebarAppearsTransparent`, titre caché, et cette barre est ancrée au
-/// sommet du contenu, d'un bord à l'autre, en ignorant la safe-area du titre (`safeAreaRegions = []`) —
-/// jamais poussée sous la rangée des feux. Son propre fond couvre la bande de la barre de titre
-/// comprise ; rien n'est posé dans la barre de titre au-dessus du contenu. Le volet commence au bas
-/// du bandeau, à `espace-2` comme autour de la plaque, et le déplacement de la fenêtre se fait par le
-/// bandeau, hors onglets. Règle complète : « La fenêtre Réglages (.sw) monte sous la barre de titre »,
+/// Dans la fenêtre commune, cette barre est dans l'en-tête (`EnTeteDesReglages`, `.sw .bar`) : la
+/// fenêtre en `fullSizeContentView` + `titlebarAppearsTransparent`, titre caché, l'en-tête ancré au
+/// sommet du contenu, d'un bord à l'autre, en ignorant la safe-area du titre — jamais poussé sous
+/// la rangée des feux. Règle complète : « La fenêtre Réglages (.sw) monte sous la barre de titre »,
 /// section 7 de la référence.
 public struct BarreDesOnglets<Valeur: Hashable>: View {
     public struct Onglet {
@@ -640,19 +638,36 @@ public struct BarreDesOnglets<Valeur: Hashable>: View {
     }
 
     public let onglets: [Onglet]
+    public let communs: [Onglet]
     @Binding public var selection: Valeur
 
-    public init(onglets: [Onglet], selection: Binding<Valeur>) {
+    public init(onglets: [Onglet], communs: [Onglet] = [], selection: Binding<Valeur>) {
         self.onglets = onglets
+        self.communs = communs
         self._selection = selection
     }
+    @Environment(\.couleursSynseria) private var c
+
+    private var tous: [Onglet] { onglets + communs }
 
     public var body: some View {
         HStack(spacing: Jetons.espace1) {
             ForEach(onglets, id: \.valeur) { onglet in
-                OngletDeReglages(onglet: onglet, choisi: onglet.valeur == selection) { selection = onglet.valeur }
+                BoutonDOnglet(onglet: onglet, choisi: onglet.valeur == selection) { selection = onglet.valeur }
+            }
+            if !onglets.isEmpty, !communs.isEmpty {
+                // `.stabs-filet` : le filet entre les deux groupes, à `espace-2` de chacun et des bords.
+                Rectangle().fill(c.filet.couleur)
+                    .frame(width: Jetons.epaisseurFilet)
+                    .padding(.vertical, Jetons.espace2)
+                    .padding(.horizontal, Jetons.espace2 - Jetons.espace1)
+                    .accessibilityHidden(true)
+            }
+            ForEach(communs, id: \.valeur) { onglet in
+                BoutonDOnglet(onglet: onglet, choisi: onglet.valeur == selection) { selection = onglet.valeur }
             }
         }
+        .fixedSize(horizontal: false, vertical: true)
         // `.sw .bar` : le haut à hauteur des boutons de la fenêtre.
         .padding(.top, Jetons.espace3)
         .padding(.bottom, Jetons.espace2)
@@ -664,12 +679,13 @@ public struct BarreDesOnglets<Valeur: Hashable>: View {
     }
 
     private func deplacer(_ pas: Int) -> KeyPress.Result {
-        guard let rang = onglets.firstIndex(where: { $0.valeur == selection }), onglets.indices.contains(rang + pas) else { return .handled }
-        selection = onglets[rang + pas].valeur
+        let tous = tous
+        guard let rang = tous.firstIndex(where: { $0.valeur == selection }), tous.indices.contains(rang + pas) else { return .handled }
+        selection = tous[rang + pas].valeur
         return .handled
     }
 
-    private struct OngletDeReglages: View {
+    private struct BoutonDOnglet: View {
         let onglet: Onglet
         let choisi: Bool
         let choisir: () -> Void

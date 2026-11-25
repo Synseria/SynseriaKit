@@ -35,9 +35,11 @@ public struct SigneSynseria: View {
     }
 }
 
-/// « À propos » (`.apropos`), une colonne centrée de `largeur-apropos` : l'icône de l'app (celle
-/// du Dock ; l'emblème est la marque de l'éditeur), son nom, « by » et le signe, puis sa ligne — la
-/// version entière, ou l'état de la mise à jour et son geste.
+/// « À propos » (`.apropos`), une fenêtre à part de `largeur-apropos`, ouverte par le menu de l'app :
+/// l'icône de l'app (celle du Dock ; l'emblème est la marque de l'éditeur), son nom, « by » et le
+/// signe, puis sa ligne — la version entière (`LigneDeVersion`), ou la version et « Rechercher »
+/// dessous (`LigneDeMiseAJour(disposition: .colonne)`). Le haut laisse la rangée des feux (`.fen-apropos
+/// .bar`), la fenêtre en `fullSizeContentView`.
 public struct GabaritAPropos<Ligne: View>: View {
     public let icone: Image
     public let nom: String
@@ -68,8 +70,10 @@ public struct GabaritAPropos<Ligne: View>: View {
             }
             ligne
         }
-        .padding(Jetons.espace6)
+        .padding([.horizontal, .bottom], Jetons.espace6)
+        .padding(.top, Jetons.espace3 * 2 + Jetons.diametreMini)
         .frame(width: Jetons.largeurApropos)
+        .ignoresSafeArea(.container, edges: .top)
     }
 }
 
