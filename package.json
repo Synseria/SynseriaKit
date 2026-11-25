@@ -1,0 +1,22 @@
+{
+  "name": "@synseria/kit",
+  "version": "2.0.1",
+  "description": "Le design system Synseria : variables CSS et calcul des couleurs.",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Synseria/SynseriaKit.git"
+  },
+  "main": "web/couleur.js",
+  "style": "web/synseria.css",
+  "exports": {
+    ".": "./web/couleur.js",
+    "./couleur.js": "./web/couleur.js",
+    "./synseria.css": "./web/synseria.css"
+  },
+  "files": [
+    "web/",
+    "LICENSE",
+    "README.md"
+  ]
+}
