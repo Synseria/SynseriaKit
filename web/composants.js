@@ -37,7 +37,7 @@
     '.f input{all:unset;flex:1;min-width:0;font:var(--typo-corps);color:var(--encre)}.f input::placeholder{color:var(--encre-3)}.f svg.i{color:var(--encre-3)}',
     '.slc{font:var(--typo-corps);text-align:left;justify-content:space-between;width:100%;cursor:pointer;outline:none}',
     '.slc .lb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.slc svg.i{width:var(--diametre-mini);height:var(--diametre-mini);color:var(--encre-2)}',
-    '.mnu{position:absolute;top:calc(100% + var(--espace-1));left:0;z-index:20;box-sizing:border-box;min-width:100%;width:max-content;max-width:min(var(--largeur-feuille),calc(100vw - var(--espace-6)));max-height:calc(var(--hauteur-controle)*8 + var(--espace-1)*2);overflow-y:auto;padding:var(--espace-1);display:flex;flex-direction:column;background:var(--fond-fenetre);border:var(--epaisseur-filet) solid var(--filet);border-radius:var(--rayon-2)}',
+    '.mnu{position:absolute;top:calc(100% + var(--espace-1));left:0;z-index:20;box-sizing:border-box;min-width:100%;width:max-content;max-width:min(var(--largeur-feuille),calc(100vw - var(--espace-6)));max-height:calc(var(--hauteur-controle)*8 + var(--espace-1)*2);overflow-y:auto;padding:var(--espace-1);display:flex;flex-direction:column;background:var(--plaque);border:var(--epaisseur-filet) solid var(--filet);border-radius:var(--rayon-2)}',
     '.mnu.droite{left:auto;right:0}',
     '.mi{height:var(--hauteur-controle);flex:none;border-radius:var(--rayon-1);display:flex;align-items:center;gap:var(--espace-2);padding:0 var(--espace-2);color:var(--encre);white-space:nowrap;cursor:pointer}',
     '.mi .ck{width:var(--taille-icone);flex:none;display:grid}.mi.hov{background:var(--accent);color:var(--texte-sur-accent)}.mi.hov svg.i{color:inherit}',

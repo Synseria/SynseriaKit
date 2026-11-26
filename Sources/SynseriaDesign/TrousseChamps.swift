@@ -1058,7 +1058,7 @@ private struct PoseDeLaListe: Layout {
     }
 }
 
-/// La liste d'un champ à suggestions ou d'un sélecteur (`.cbx .mnu`) : une carte sur la fenêtre,
+/// La liste d'un champ à suggestions ou d'un sélecteur (`.cbx .mnu`) : une carte sur la plaque,
 /// son filet, `rayon-2` ; des rangées de menu (`.mi`) — la choisie cochée, la surlignée pleine
 /// `accent`, la saisie sur le fond du choix (`mark`) ; huit rangées, puis elle défile. Vide, elle le
 /// dit ; en attente du serveur, l'activité. `recherche` : ce qui filtre, en tête (`.cbx .rch`).
@@ -1121,9 +1121,14 @@ public struct ListeDeSuggestions<Valeur: Hashable>: View {
             }
             rangees
         }
-        .background(c.fondFenetre.couleur, in: forme)
+        // Pleine, même quand l'app voile sa plaque (le verre) : on ne lit pas à travers une liste.
+        .background(c.plaque.voile(1).couleur, in: forme)
         .overlay { forme.strokeBorder(c.filet.couleur, lineWidth: Jetons.epaisseurFilet) }
         .clipShape(forme)
+        // Un clic dans la liste hors d'une rangée (la recherche, l'air entre les rangées) lui
+        // reste : sans cela, il tombe sur le fond de l'hôte, qui la ferme.
+        .contentShape(forme)
+        .onTapGesture {}
     }
 
     private var rangees: some View {
@@ -1173,8 +1178,9 @@ public struct ListeDeSuggestions<Valeur: Hashable>: View {
     }
 }
 
-/// La recherche d'un sélecteur, en tête de sa liste (`.cbx .rch`) : la loupe, ce qui est tapé, sur
-/// la plaque, `rayon-1`. La frappe va au sélecteur, qui la lui passe : rien à focaliser.
+/// La recherche d'un sélecteur, en tête de sa liste (`.cbx .rch`) : la loupe, ce qui est tapé et le
+/// point d'insertion (`.caret`), sur le fond teinté, `rayon-1`. La frappe va au sélecteur, qui la
+/// lui passe : rien à focaliser, la saisie est prise dès l'ouverture — le point d'insertion le dit.
 private struct RangeeDeRecherche: View {
     let texte: String
     let invite: String?
@@ -1186,18 +1192,44 @@ private struct RangeeDeRecherche: View {
                 .font(.system(size: Jetons.diametreMini))
                 .foregroundStyle(c.encre2.couleur)
                 .frame(width: Jetons.tailleIcone)
-            Text(texte.isEmpty ? invite ?? "" : texte)
-                .foregroundStyle((texte.isEmpty ? c.encre3 : c.encre).couleur)
-                .lineLimit(1)
+            HStack(spacing: 0) {
+                if !texte.isEmpty { Text(texte).foregroundStyle(c.encre.couleur) }
+                PointDInsertion()
+                if texte.isEmpty { Text(invite ?? "").foregroundStyle(c.encre3.couleur) }
+            }
+            .lineLimit(1)
             Spacer(minLength: 0)
         }
         .font(Jetons.typoCorps.font)
         .padding(.horizontal, Jetons.espace2)
         .frame(height: Jetons.hauteurControle)
-        .background(c.plaque.couleur, in: .rect(cornerRadius: Jetons.rayon1, style: .circular))
+        .background(c.fondTeinte.couleur, in: .rect(cornerRadius: Jetons.rayon1, style: .circular))
+        #if os(macOS)
+        .pointerStyle(.horizontalText)
+        #endif
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(invite ?? "")
         .accessibilityValue(texte)
+    }
+}
+
+/// Le point d'insertion (`.caret`) : un trait d'`accent`, allumé une moitié de `duree-boucle`,
+/// éteint l'autre, calculé depuis la date (aucune animation en boucle) ; fixe si le système
+/// réduit les animations.
+private struct PointDInsertion: View {
+    @Environment(\.couleursSynseria) private var c
+    @Environment(\.accessibilityReduceMotion) private var reduire
+
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: Jetons.dureeBoucle / 2)) { contexte in
+            let phase = contexte.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: Jetons.dureeBoucle)
+            Rectangle()
+                .fill(c.accent.couleur)
+                .frame(width: 2, height: Jetons.tailleIcone)
+                .opacity(reduire || phase < Jetons.dureeBoucle / 2 ? 1 : 0)
+        }
+        .padding(.horizontal, 1)
+        .accessibilityHidden(true)
     }
 }
 
