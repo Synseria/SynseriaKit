@@ -5,7 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "SynseriaKit",
-    platforms: [.macOS(.v26)],
+    // iOS : une cible iOS d'une app lit jetons et trousse ; Xcode refuse un produit dont le
+    // manifeste ne déclare pas la plateforme (SwiftPM en ligne de commande ne le vérifie pas).
+    platforms: [.macOS(.v26), .iOS(.v26)],
     products: [
         .library(name: "SynseriaDesign", targets: ["SynseriaDesign"]),
         .library(name: "Telemetrie", targets: ["Telemetrie"]),
