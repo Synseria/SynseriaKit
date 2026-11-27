@@ -10,7 +10,9 @@
    <syn-champ libelle="…" placeholder="…" valeur="…" icone="recherche" type="…" grand desactive>   input, change {value}
    <syn-carte titre="…"><… slot="geste"></…>contenu</syn-carte>
    <syn-etat-vide icone="…" titre="…"><syn-bouton>…</syn-bouton></syn-etat-vide>   jamais de phrase dessous
-   <syn-formulaire> ▸ <syn-section titre="…"> ▸ <syn-rangee libelle="…" aide="…">contrôle</syn-rangee>   l'aide en infobulle */
+   <syn-formulaire> ▸ <syn-section titre="…"> ▸ <syn-rangee libelle="…" aide="…">contrôle</syn-rangee>   l'aide en infobulle
+   <syn-reglages libelle="Réglages" page="…"> ▸ <syn-page-reglages cle="…" libelle="…" icone="…">formulaire</syn-page-reglages>
+     change {page}, propriété page ; large : la barre latérale et la page ; étroit : la liste, puis la page et son retour */
 (function(){
   if(typeof window==='undefined'||!window.customElements||window.customElements.get('syn-bouton'))return;
   var CSS=[
@@ -47,17 +49,41 @@
     '.vide{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--espace-3);padding:var(--espace-5);min-height:calc(var(--hauteur-rangee)*4);text-align:center}',
     '.vide .ic{width:calc(var(--hauteur-rangee)*1.5);height:calc(var(--hauteur-rangee)*1.5);border-radius:50%;background:color-mix(in srgb,var(--accent) var(--taux-selection),transparent);color:var(--accent-texte);display:grid;place-items:center}',
     '.vide .ic svg.i{width:var(--espace-5);height:var(--espace-5)}.vide .tl{font:var(--typo-titre-carte)}',
-    '.sc{display:flex;flex-direction:column;gap:var(--espace-3)}',
-    '.sct{font:var(--typo-titre-carte);color:var(--encre-2);padding-left:var(--espace-1);margin-bottom:var(--espace-1)}',
+    '.sc{display:flex;flex-direction:column;gap:var(--espace-5)}',
+    '.sct{font:var(--typo-titre-carte);color:var(--encre);padding-left:var(--espace-1);margin-bottom:var(--espace-2)}',
     '.scc{background:var(--carte);border:var(--epaisseur-filet) solid var(--filet);border-radius:var(--rayon-2)}',
     '.rr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--espace-2) var(--espace-3);min-height:calc(var(--hauteur-rangee) - var(--espace-2));padding:var(--espace-1) var(--espace-3)}',
     ':host(syn-rangee:not(:first-of-type)) .rr{border-top:var(--epaisseur-filet) solid var(--filet)}',
-    '.rr .lab{flex:1 1 8em;min-width:0}.rr .fin{display:flex;align-items:center;gap:var(--espace-2);margin-left:auto}'
+    '.rr .lab{flex:1 1 8em;min-width:0}.rr .fin{display:flex;align-items:center;gap:var(--espace-2);margin-left:auto}',
+    // réglages : large, la barre latérale (largeur-nav) et la page sur la plaque ; étroit, la liste en carte, puis la page et son retour
+    '.rg{display:grid;grid-template-columns:var(--largeur-nav) minmax(0,1fr);gap:var(--espace-2);min-height:inherit;box-sizing:border-box;padding:var(--espace-2)}',
+    '.nav{display:flex;flex-direction:column;gap:var(--espace-1);padding:var(--espace-2) 0}',
+    '.it{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:var(--espace-2);min-height:var(--hauteur-controle);padding:0 var(--espace-3);border-radius:var(--rayon-1);font:var(--typo-corps);color:var(--encre);cursor:pointer}',
+    '.it svg.i{color:var(--encre-2)}.it .va{display:none;margin-left:auto}',
+    '.it:hover{background:var(--survol)}.it[aria-current=page]{background:var(--selection);color:var(--accent-texte)}.it[aria-current=page] svg.i{color:inherit}',
+    '.it:focus-visible{outline:var(--anneau-focus);outline-offset:var(--decalage-focus)}',
+    '.pg{background:var(--plaque);border:var(--epaisseur-filet) solid var(--filet);border-radius:var(--rayon-3);padding:var(--espace-5);min-width:0}',
+    '.ret{display:none}',
+    '.rg.etroit{display:block;padding:var(--espace-4)}',
+    '.rg.etroit .nav{padding:0;gap:0;background:var(--carte);border:var(--epaisseur-filet) solid var(--filet);border-radius:var(--rayon-2);overflow:hidden}',
+    '.rg.etroit .it{min-height:calc(var(--hauteur-rangee) - var(--espace-2));border-radius:0}.rg.etroit .it+.it{border-top:var(--epaisseur-filet) solid var(--filet)}',
+    '.rg.etroit .it[aria-current=page]{background:none;color:var(--encre)}.rg.etroit .it[aria-current=page] svg.i{color:var(--encre-2)}',
+    '.rg.etroit .it .va{display:grid;color:var(--encre-3)}.rg.etroit .it .va svg.i{width:var(--diametre-mini);height:var(--diametre-mini);color:inherit}',
+    '.rg.etroit .pg{background:none;border:0;padding:0}',
+    '.rg.etroit.liste .pg,.rg.etroit.page .nav{display:none}',
+    '.rg.etroit .ret{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;min-height:var(--hauteur-controle);margin-bottom:var(--espace-4)}',
+    '.ret .titre{font:var(--typo-section);text-align:center}',
+    '.ret button{all:unset;justify-self:start;display:inline-flex;align-items:center;gap:var(--espace-1);height:var(--hauteur-controle);padding:0 var(--espace-2);border-radius:var(--rayon-pilule);color:var(--accent-texte);font:var(--typo-corps);cursor:pointer}',
+    '.ret button:hover{background:var(--survol)}.ret button:focus-visible{outline:var(--anneau-focus);outline-offset:var(--decalage-focus)}',
+    '.ret svg.i{width:var(--diametre-mini);height:var(--diametre-mini)}',
+    '.pr{max-width:calc(var(--largeur-nav)*3);margin:0 auto}'
   ].join('\n');
   var feuille=new CSSStyleSheet();feuille.replaceSync(CSS);
 
   // les icônes du SDS dont les composants ont besoin (trait, 24 × 24)
-  var ICONES={plus:'M12 5v14M5 12h14',moins:'M5 12h14',recherche:'M10.5 4.5a6 6 0 1 0 0 12a6 6 0 1 0 0-12zM15 15l5 5',chevron:'M6 9l6 6 6-6',coche:'M5.5 12.5l4.2 4.2L18.5 7.8',
+  var ICONES={plus:'M12 5v14M5 12h14',liste:'M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01',
+    retour:'M15 6l-6 6 6 6',suite:'M9 6l6 6-6 6',curseurs:'M4 7h10M18 7h2M4 17h4M12 17h8M16 5v4M10 15v4',
+    wifi:'M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.5 16a5 5 0 0 1 7 0M12 19.5h.01',moins:'M5 12h14',recherche:'M10.5 4.5a6 6 0 1 0 0 12a6 6 0 1 0 0-12zM15 15l5 5',chevron:'M6 9l6 6 6-6',coche:'M5.5 12.5l4.2 4.2L18.5 7.8',
     ampoule:'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z',
     thermometre:'M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0zM12 9v7',eclair:'M13 3L5 13.5h6l-1 7.5 8-10.5h-6z',
     camera:'M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM12 9.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7z',
@@ -90,6 +116,41 @@
     return (t?'<div class="sct">'+esc(t)+'</div>':'')+'<div class="scc"><slot></slot></div>'});
   var SynRangee=simple(['libelle','aide'],'block',function(el){var a=el.getAttribute('aide');
     return '<div class="rr"'+(a?' title="'+esc(a)+'"':'')+'><span class="lab">'+esc(el.getAttribute('libelle'))+'</span><span class="fin"><slot></slot></span></div>'});
+
+  // une page de réglages : ce qu'elle montre est son contenu, centré, borné à trois barres latérales : un formulaire étiré se lit mal
+  var SynPageReglages=simple([],'block',function(){return '<div class="pr"><slot></slot></div>'});
+
+  // la fenêtre des réglages d'une app web : ses pages sont ses enfants `syn-page-reglages`, dans l'ordre (Général et Thème
+  // d'abord, comme sur macOS). Large, la barre latérale dit où l'on est : pas de titre de page. Étroit (moins que la barre,
+  // une feuille et leur air), la liste des pages, puis la page choisie, son titre et le retour à la liste.
+  class SynReglages extends HTMLElement{
+    static get observedAttributes(){return ['page','libelle']}
+    get pages(){return [].filter.call(this.children,function(e){return e.localName==='syn-page-reglages'})}
+    get page(){var p=this.getAttribute('page'),pages=this.pages;return pages.some(function(e){return e.getAttribute('cle')===p})?p:(pages[0]?pages[0].getAttribute('cle'):'')}
+    set page(v){this.setAttribute('page',v)}
+    connectedCallback(){if(this.shadowRoot)return;afficher(this,'block');this.vue='liste';
+      var r=racine(this,'<div class="rg"><nav class="nav"></nav><div class="pg"><div class="ret"><button>'+icone('retour')+'<span></span></button><b class="titre"></b></div><slot></slot></div></div>');
+      this.rg=r.querySelector('.rg');this.nav=r.querySelector('.nav');
+      this.nav.addEventListener('click',e=>{var it=e.target.closest('.it');if(it)this.choisir(it.dataset.cle)});
+      r.querySelector('.ret button').addEventListener('click',()=>{this.vue='liste';this.peindre()});
+      new MutationObserver(()=>this.peindre()).observe(this,{childList:true,subtree:true,attributes:true,attributeFilter:['cle','libelle','icone']});
+      new ResizeObserver(()=>this.mesurer()).observe(this);this.mesurer()}
+    attributeChangedCallback(){this.peindre()}
+    // le seuil vient des jetons : la barre, une feuille et l'air de la page de chaque côté
+    mesurer(){var s=getComputedStyle(this),px=function(n){return parseFloat(s.getPropertyValue(n))||0};
+      var etroit=this.getBoundingClientRect().width<px('--largeur-nav')+px('--largeur-feuille')+2*px('--espace-5');
+      if(etroit!==this.etroit){this.etroit=etroit;this.peindre()}}
+    choisir(cle){this.vue='page';if(cle!==this.page){this.page=cle;emettre(this,'change',{page:cle})}else this.peindre()}
+    peindre(){if(!this.rg)return;var choisie=this.page,pages=this.pages,etroit=!!this.etroit;
+      this.rg.classList.toggle('etroit',etroit);this.rg.classList.toggle('liste',etroit&&this.vue==='liste');this.rg.classList.toggle('page',etroit&&this.vue!=='liste');
+      this.nav.setAttribute('aria-label',this.getAttribute('libelle')||'');
+      this.nav.innerHTML=pages.map(function(e){var c=e.getAttribute('cle');return '<button class="it" data-cle="'+esc(c)+'"'+(c===choisie?' aria-current="page"':'')+'>'+
+        icone(e.getAttribute('icone'))+'<span>'+esc(e.getAttribute('libelle'))+'</span><span class="va">'+icone('suite')+'</span></button>'}).join('');
+      pages.forEach(function(e){e.hidden=e.getAttribute('cle')!==choisie;e.style.display=e.hidden?'none':'block'});
+      var montree=pages.filter(function(e){return !e.hidden})[0];
+      this.shadowRoot.querySelector('.ret span').textContent=this.getAttribute('libelle')||'';
+      this.shadowRoot.querySelector('.ret .titre').textContent=montree?montree.getAttribute('libelle'):''}
+  }
 
   class SynInterrupteur extends HTMLElement{
     static get observedAttributes(){return ['coche','desactive','libelle']}
@@ -159,5 +220,6 @@
   }
 
   [['syn-bouton',SynBouton],['syn-interrupteur',SynInterrupteur],['syn-selecteur',SynSelecteur],['syn-champ',SynChamp],['syn-carte',SynCarte],
-   ['syn-etat-vide',SynEtatVide],['syn-formulaire',SynFormulaire],['syn-section',SynSection],['syn-rangee',SynRangee]].forEach(function(x){customElements.define(x[0],x[1])});
+   ['syn-etat-vide',SynEtatVide],['syn-formulaire',SynFormulaire],['syn-section',SynSection],['syn-rangee',SynRangee],
+   ['syn-page-reglages',SynPageReglages],['syn-reglages',SynReglages]].forEach(function(x){customElements.define(x[0],x[1])});
 })();

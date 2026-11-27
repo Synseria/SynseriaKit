@@ -11,7 +11,7 @@ qui publie une nouvelle version ici.
 **Swift** (macOS 26) :
 
 ```swift
-.package(url: "https://github.com/Synseria/SynseriaKit", exact: "2.6.0-rc.3")
+.package(url: "https://github.com/Synseria/SynseriaKit", exact: "2.6.0-rc.4")
 ```
 
 Produits : `SynseriaDesign` (`Jetons`, la trousse SwiftUI), `Telemetrie`, `MiseAJour`. Ce qui est propre
@@ -20,15 +20,15 @@ Produits : `SynseriaDesign` (`Jetons`, la trousse SwiftUI), `Telemetrie`, `MiseA
 **Web** :
 
 ```sh
-npm install github:Synseria/SynseriaKit#v2.6.0-rc.3
+npm install github:Synseria/SynseriaKit#v2.6.0-rc.4
 ```
 
-ou par jsDelivr : `https://cdn.jsdelivr.net/gh/Synseria/SynseriaKit@v2.6.0-rc.3/web/synseria.css` et
+ou par jsDelivr : `https://cdn.jsdelivr.net/gh/Synseria/SynseriaKit@v2.6.0-rc.4/web/synseria.css` et
 `…/web/couleur.js` (global `Couleur`, ou `require("@synseria/kit")`).
 
 Les composants (`web/composants.js`, par `<script>` ou `import "@synseria/kit/composants.js"`) : `syn-bouton`,
 `syn-interrupteur`, `syn-selecteur`, `syn-champ`, `syn-carte`, `syn-etat-vide`, `syn-formulaire`,
-`syn-section`, `syn-rangee` — des éléments natifs, sur les variables de `synseria.css`, dans Angular,
+`syn-section`, `syn-rangee`, `syn-reglages`, `syn-page-reglages` — des éléments natifs, sur les variables de `synseria.css`, dans Angular,
 React ou une page simple. La police de repli : `web/nunito.css` (Nunito, Google Fonts).
 
 **Android** : ressources `android/` (`jetons.xml`, clair et nuit), préparées pour JitPack ; pas
