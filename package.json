@@ -1,6 +1,6 @@
 {
   "name": "@synseria/kit",
-  "version": "2.6.0-rc.2",
+  "version": "2.6.0-rc.3",
   "description": "Le design system Synseria : variables CSS et calcul des couleurs.",
   "license": "SEE LICENSE IN LICENSE",
   "repository": {

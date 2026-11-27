@@ -11,7 +11,7 @@ qui publie une nouvelle version ici.
 **Swift** (macOS 26) :
 
 ```swift
-.package(url: "https://github.com/Synseria/SynseriaKit", exact: "2.6.0-rc.2")
+.package(url: "https://github.com/Synseria/SynseriaKit", exact: "2.6.0-rc.3")
 ```
 
 Produits : `SynseriaDesign` (`Jetons`, la trousse SwiftUI), `Telemetrie`, `MiseAJour`. Ce qui est propre
@@ -20,10 +20,10 @@ Produits : `SynseriaDesign` (`Jetons`, la trousse SwiftUI), `Telemetrie`, `MiseA
 **Web** :
 
 ```sh
-npm install github:Synseria/SynseriaKit#v2.6.0-rc.2
+npm install github:Synseria/SynseriaKit#v2.6.0-rc.3
 ```
 
-ou par jsDelivr : `https://cdn.jsdelivr.net/gh/Synseria/SynseriaKit@v2.6.0-rc.2/web/synseria.css` et
+ou par jsDelivr : `https://cdn.jsdelivr.net/gh/Synseria/SynseriaKit@v2.6.0-rc.3/web/synseria.css` et
 `…/web/couleur.js` (global `Couleur`, ou `require("@synseria/kit")`).
 
 Les composants (`web/composants.js`, par `<script>` ou `import "@synseria/kit/composants.js"`) : `syn-bouton`,

@@ -121,7 +121,7 @@ public enum Jetons {
     /// fenêtre des réglages
     public static let largeurReglages: CGFloat = 1120
     /// fenêtre des réglages : la même pour tous les onglets, Réglages ▸ Thème y tient sans défiler, en-tête compris
-    public static let hauteurReglages: CGFloat = 710
+    public static let hauteurReglages: CGFloat = 720
 
     // MARK: Mouvement
     /// survol, pression
