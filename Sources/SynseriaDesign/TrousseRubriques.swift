@@ -126,7 +126,7 @@ public struct FormulaireCompact<Contenu: View>: View {
 
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: Jetons.espace3) { contenu }
+            VStack(alignment: .leading, spacing: Jetons.espace5) { contenu }
                 .padding(Self.marge)
         }
         .contentMargins(.vertical, 0, for: .scrollContent)
@@ -158,13 +158,13 @@ public struct SectionCompacte<Contenu: View, Entete: View>: View {
 
     public var body: some View {
         let forme = RoundedRectangle(cornerRadius: Jetons.rayon2, style: .circular)
-        VStack(alignment: .leading, spacing: Jetons.espace1) {
+        VStack(alignment: .leading, spacing: Jetons.espace2) {
             if titre != nil || Entete.self != EmptyView.self {
                 HStack(spacing: Jetons.espace2) {
                     if let titre {
                         Text(titre)
                             .font(Jetons.typoTitreCarte.font)
-                            .foregroundStyle(c.encre2.couleur)
+                            .foregroundStyle(c.encre.couleur)
                             .help(aide ?? "")
                     }
                     Spacer(minLength: Jetons.espace3)

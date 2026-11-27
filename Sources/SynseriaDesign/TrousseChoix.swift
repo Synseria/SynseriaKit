@@ -616,8 +616,8 @@ public struct Puce: View {
 
 /// Les onglets d'une fenêtre de réglages (`.stab`) : l'icône et le nom en micro dessous, sans cadre,
 /// le choisi sur le fond du choix et l'accent en texte. Pas de titre de page : les onglets disent où
-/// l'on est. Ceux de l'app d'abord, puis un filet, puis les communs (`communs`) ; un seul arrêt de
-/// Tab, ←→ passent d'un onglet au suivant, filet compris.
+/// l'on est. Une seule rangée, sans filet : la fenêtre ne montre pas d'où vient un onglet (l'app ou
+/// la trousse), seulement où l'on va ; un seul arrêt de Tab, ←→ passent d'un onglet au suivant.
 ///
 /// Dans la fenêtre commune, cette barre est dans l'en-tête (`EnTeteDesReglages`, `.sw .bar`) : la
 /// fenêtre en `fullSizeContentView` + `titlebarAppearsTransparent`, titre caché, l'en-tête ancré au
@@ -638,32 +638,16 @@ public struct BarreDesOnglets<Valeur: Hashable>: View {
     }
 
     public let onglets: [Onglet]
-    public let communs: [Onglet]
     @Binding public var selection: Valeur
 
-    public init(onglets: [Onglet], communs: [Onglet] = [], selection: Binding<Valeur>) {
+    public init(onglets: [Onglet], selection: Binding<Valeur>) {
         self.onglets = onglets
-        self.communs = communs
         self._selection = selection
     }
-    @Environment(\.couleursSynseria) private var c
-
-    private var tous: [Onglet] { onglets + communs }
 
     public var body: some View {
         HStack(spacing: Jetons.espace1) {
             ForEach(onglets, id: \.valeur) { onglet in
-                BoutonDOnglet(onglet: onglet, choisi: onglet.valeur == selection) { selection = onglet.valeur }
-            }
-            if !onglets.isEmpty, !communs.isEmpty {
-                // `.stabs-filet` : le filet entre les deux groupes, à `espace-2` de chacun et des bords.
-                Rectangle().fill(c.filet.couleur)
-                    .frame(width: Jetons.epaisseurFilet)
-                    .padding(.vertical, Jetons.espace2)
-                    .padding(.horizontal, Jetons.espace2 - Jetons.espace1)
-                    .accessibilityHidden(true)
-            }
-            ForEach(communs, id: \.valeur) { onglet in
                 BoutonDOnglet(onglet: onglet, choisi: onglet.valeur == selection) { selection = onglet.valeur }
             }
         }
@@ -679,9 +663,8 @@ public struct BarreDesOnglets<Valeur: Hashable>: View {
     }
 
     private func deplacer(_ pas: Int) -> KeyPress.Result {
-        let tous = tous
-        guard let rang = tous.firstIndex(where: { $0.valeur == selection }), tous.indices.contains(rang + pas) else { return .handled }
-        selection = tous[rang + pas].valeur
+        guard let rang = onglets.firstIndex(where: { $0.valeur == selection }), onglets.indices.contains(rang + pas) else { return .handled }
+        selection = onglets[rang + pas].valeur
         return .handled
     }
 

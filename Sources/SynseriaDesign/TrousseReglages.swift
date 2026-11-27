@@ -1,8 +1,8 @@
 // Engendré par Synseria-Design — jamais édité à la main : https://github.com/Synseria/SynseriaKit
 import SwiftUI
 
-// La fenêtre de réglages commune aux apps : l'en-tête en verre et ses onglets (ceux de l'app, un
-// filet, Général et Thème), le volet sur sa plaque, Réglages ▸ Général commun et la ligne de mise à
+// La fenêtre de réglages commune aux apps : l'en-tête en verre et ses onglets (Général et Thème,
+// puis ceux de l'app, en une rangée), le volet sur sa plaque, Réglages ▸ Général commun et la ligne de mise à
 // jour, celle de Général comme celle d'À propos. Les données viennent de l'app, par valeurs et closures.
 
 #if os(macOS)
@@ -10,7 +10,7 @@ import ServiceManagement
 
 // MARK: - La fenêtre
 
-/// Un onglet de la fenêtre commune : ceux de l'app, puis les communs, toujours dans cet ordre.
+/// Un onglet de la fenêtre commune : les communs, puis ceux de l'app, toujours dans cet ordre.
 public enum OngletDesReglages<Propre: Hashable>: Hashable {
     case propre(Propre)
     case general
@@ -61,8 +61,8 @@ public enum FenetreDeReglages {
 }
 
 /// Le contenu de la fenêtre de réglages (`.sw`) : l'en-tête et ses onglets, puis le volet choisi sur
-/// la plaque. Les onglets de l'app d'abord, un filet, puis Général et Thème, que la trousse nomme et
-/// range elle-même. Général se donne entier (`ReglagesGeneraux`), Thème est `ReglagesDuTheme` ; un
+/// la plaque. Général et Thème d'abord, que la trousse nomme et range elle-même, puis les onglets de
+/// l'app, en une seule rangée : ce qui vaut pour l'app entière ouvre la liste, comme sur macOS. Général se donne entier (`ReglagesGeneraux`), Thème est `ReglagesDuTheme` ; un
 /// volet de l'app prend toute la plaque et règle sa largeur. Les mots sont ceux de la langue où l'app
 /// s'affiche, qu'elle seule connaît (`LibellesDesReglages.langue(_:)`) : la trousse ne la devine pas.
 public struct CadreDesReglages<Propre: Hashable, General: View, Volet: View>: View {
@@ -103,8 +103,9 @@ public struct CadreDesReglages<Propre: Hashable, General: View, Volet: View>: Vi
     public var body: some View {
         VStack(spacing: 0) {
             EnTeteDesReglages {
-                BarreDesOnglets(onglets: propres.map { .init(valeur: .propre($0.valeur), libelle: $0.libelle, symbole: $0.symbole) },
-                                communs: Self.communs(libelles), selection: $selection)
+                BarreDesOnglets(onglets: Self.communs(libelles)
+                                    + propres.map { .init(valeur: .propre($0.valeur), libelle: $0.libelle, symbole: $0.symbole) },
+                                selection: $selection)
             }
             contenu
                 .font(Jetons.typoCorps.font)
