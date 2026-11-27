@@ -1163,10 +1163,12 @@ public struct ListeDeSuggestions<Valeur: Hashable>: View {
                             .id(index)
                     }
                 }
-                .padding(Jetons.espace1)
             }
             .scrollIndicators(rangees > Self.rangeesVisibles ? .automatic : .never)
-            .frame(height: Self.hauteur(pour: trouvees))
+            .frame(height: Self.hauteur(pour: trouvees) - 2 * Jetons.espace1)
+            // L'air autour du défilement, pas dans son contenu : une vue AppKit défilante se dessine
+            // au-dessus du filet et ne suit pas l'arrondi, une rangée défilée y passait par-dessus.
+            .padding(Jetons.espace1)
             // Ouverte, la valeur engagée se montre, même au-delà de la huitième rangée.
             .onAppear {
                 if let index = surlignee ?? trouvees.firstIndex(where: { $0.proposition.valeur == choisie }) {
